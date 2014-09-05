@@ -193,7 +193,7 @@ class CWStatusBarNotification : NSObject {
     }
     
     func getStatusBarWidth() -> CGFloat {
-        return UIScreen.mainScreen().bounds.size.height
+        return UIScreen.mainScreen().bounds.size.width
     }
     
     func getNotificationLabelTopFrame() -> CGRect {

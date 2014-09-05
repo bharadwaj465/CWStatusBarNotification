@@ -42,11 +42,11 @@ class ScrollLabel : UILabel {
     
     var textImage : UIImageView!
     
-    init(coder aDecoder: NSCoder!) {
+    required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    init(frame: CGRect) {
+    override init(frame: CGRect) {
         self.textImage = UIImageView()
         super.init(frame: frame)
     }
@@ -99,8 +99,7 @@ class ScrollLabel : UILabel {
 // ---- [ CWWindowContainer ] -------------------------------------------------
 
 class CWWindowContainer : UIWindow {
-    override func hitTest(point: CGPoint, withEvent event: UIEvent!)
-        -> UIView!  {
+    override func hitTest(point: CGPoint, withEvent event: UIEvent!) -> UIView?  {
         if point.y > 0 && point.y <
             UIApplication.sharedApplication().statusBarFrame.size.height {
             return super.hitTest(point, withEvent: event)
@@ -113,12 +112,7 @@ class CWWindowContainer : UIWindow {
 
 typealias CWDelayedClosureHandle = (Bool) -> ()
 
-func performClosureAfterDelay(seconds : Double, closure: dispatch_block_t)
--> CWDelayedClosureHandle? {
-    if closure == nil {
-        return nil
-    }
-        
+func performClosureAfterDelay(seconds : Double, closure: dispatch_block_t) -> CWDelayedClosureHandle? {
     var closureToExecute : dispatch_block_t! = closure // copy?
     var delayHandleCopy : CWDelayedClosureHandle! = nil
     
@@ -173,7 +167,7 @@ class CWStatusBarNotification : NSObject {
     
     var tapGestureRecognizer : UITapGestureRecognizer?
     var dismissHandle : CWDelayedClosureHandle?
-    init() {
+    override init() {
         super.init()
         
         self.notificationTappedClosure = {
@@ -263,7 +257,7 @@ class CWStatusBarNotification : NSObject {
     // display helpers
     
     func createNotificationLabelWithMessage(message : String) {
-        self.notificationLabel = ScrollLabel()
+        self.notificationLabel = ScrollLabel(frame: CGRectZero)
         self.notificationLabel.numberOfLines = self.multiline ? 0 : 1
         self.notificationLabel.text = message
         self.notificationLabel.textAlignment = .Center
@@ -273,7 +267,7 @@ class CWStatusBarNotification : NSObject {
         self.notificationLabel.textColor = self.notificationLabelTextColor
         self.notificationLabel.clipsToBounds = true
         self.notificationLabel.userInteractionEnabled = true
-        self.notificationLabel.addGestureRecognizer(self.tapGestureRecognizer)
+        self.notificationLabel.addGestureRecognizer(self.tapGestureRecognizer!)
         switch self.notificationAnimationInStyle {
         case .Top:
             self.notificationLabel.frame = self.getNotificationLabelTopFrame()
@@ -379,8 +373,8 @@ class CWStatusBarNotification : NSObject {
                 }, completion: { (finished : Bool) -> () in
                     var delayInSeconds = Double(self.notificationLabel.scrollTime())
                     performClosureAfterDelay(delayInSeconds, {
-                        if completion != nil {
-                            completion()!
+                        if completion() != nil {
+                            completion()
                         }
                     })
                 })

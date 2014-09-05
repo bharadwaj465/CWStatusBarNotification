@@ -225,12 +225,16 @@ class CWStatusBarNotification : NSObject {
     
     func getNotificationLabelHeight() -> CGFloat {
         switch self.notificationStyle {
-        case .NavigationBarNotification:
-            return self.getStatusBarHeight() + self.getNavigationBarHeight()
-        case .StatusBarNotification:
-            fallthrough
-        default:
-            return self.getStatusBarHeight()
+            case .NavigationBarNotification:
+                if UIApplication.sharedApplication().statusBarHidden {
+                    return self.getNavigationBarHeight()
+                } else {
+                    return self.getStatusBarHeight() + self.getNavigationBarHeight()
+                }
+            case .StatusBarNotification:
+                fallthrough
+            default:
+                return self.getStatusBarHeight()
         }
     }
     

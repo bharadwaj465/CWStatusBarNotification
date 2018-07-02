@@ -175,11 +175,7 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
     self = [super init];
     if (self) {
         // set default
-        if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
-            self.notificationLabelBackgroundColor = [[UIApplication sharedApplication] delegate].window.tintColor;
-        } else {
-            self.notificationLabelBackgroundColor = [UIColor blackColor];
-        }
+        self.notificationLabelBackgroundColor = [UIColor blackColor];
         self.notificationLabelTextColor = [UIColor whiteColor];
         self.notificationLabelFont = [UIFont systemFontOfSize:FONT_SIZE];
         self.notificationLabelHeight = 0.0;
@@ -198,6 +194,14 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
         // create tap recognizer
         self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(notificationTapped:)];
         self.tapGestureRecognizer.numberOfTapsRequired = 1;
+        
+        if (@available(iOS 11.0, *)) {
+            if (!UIEdgeInsetsEqualToEdgeInsets([[[UIApplication sharedApplication] keyWindow] safeAreaInsets], UIEdgeInsetsZero)) {
+                self.notificationStyle = CWNotificationStyleNavigationBarNotification;
+                self.notificationLabelBackgroundColor = [UIColor clearColor];
+                self.iPhoneX = TRUE;
+            }
+        }
         
         // create default tap block
         __weak typeof(self) weakSelf = self;

@@ -436,7 +436,7 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
 
 - (void)thirdFrameChange
 {
-    //self.statusBarView.frame = [self getNotificationLabelFrame];
+    self.statusBarView.frame = [self getNotificationLabelFrame];
     switch (self.notificationAnimationOutStyle) {
         case CWNotificationAnimationStyleTop:
             self.notificationLabel.frame = [self getNotificationLabelTopFrame];

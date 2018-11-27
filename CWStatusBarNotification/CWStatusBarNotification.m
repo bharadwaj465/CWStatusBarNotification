@@ -196,7 +196,8 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
         self.tapGestureRecognizer.numberOfTapsRequired = 1;
         
         if (@available(iOS 11.0, *)) {
-            if (!UIEdgeInsetsEqualToEdgeInsets([[[UIApplication sharedApplication] keyWindow] safeAreaInsets], UIEdgeInsetsZero)) {
+            if ((!UIEdgeInsetsEqualToEdgeInsets([[[UIApplication sharedApplication] keyWindow] safeAreaInsets], UIEdgeInsetsZero))
+                && ((UI_USER_INTERFACE_IDIOM() ==  UIUserInterfaceIdiomPhone))) {
                 self.notificationStyle = CWNotificationStyleNavigationBarNotification;
                 self.notificationLabelBackgroundColor = [UIColor clearColor];
                 self.iPhoneX = TRUE;
